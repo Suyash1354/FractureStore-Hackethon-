@@ -46,11 +46,11 @@ const Category1 = () => {
       </h1>
 
       {/* First Section */}
-      <div className="w-full h-[calc(100vh-250px)] px-1 pb-1 pt-2 bg-[#FAFBF7] text-black rounded-xl flex flex-col lg:flex-row gap-0.5">
+      <div className="w-full h-[calc(100vh-150px)] px-1 pb-1 pt-2 bg-[#FAFBF7] text-black rounded-xl flex flex-col lg:flex-row gap-0.5">
         {/* LEFT COLUMN - Elite Series */}
         <div className="w-full lg:flex-1 flex flex-col min-h-0 h-full">
           <h2 className="text-center text-xl font-[orbitron-bold] mb-2">
-            Elite Series
+            Suyash
           </h2>
           <ProductCard
             image={Cars[0]}
