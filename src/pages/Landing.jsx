@@ -141,25 +141,27 @@ const Landing = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 1 } }}
           >
-            {/* Show video when it can play, otherwise show black with subtle indicator */}
-            {videoCanPlay ? (
-              <video
-                ref={videoRef}
-                className="w-full h-full object-cover"
-                muted
-                playsInline
-                preload="auto"
-                style={{ 
-                  willChange: 'transform',
-                  backfaceVisibility: 'hidden'
-                }}
-              >
-                <source src={introVideo} type="video/webm" />
-                <source src={introVideo.replace('.webm', '.mp4')} type="video/mp4" />
-              </video>
-            ) : (
-              // Minimal loading state while video prepares (reduces black screen time)
-              <div className="flex flex-col items-center justify-center">
+            {/* Always render video element, but control visibility */}
+            <video
+              ref={videoRef}
+              className={`w-full h-full object-cover transition-opacity duration-300 ${
+                videoCanPlay ? 'opacity-100' : 'opacity-0'
+              }`}
+              muted
+              playsInline
+              preload="auto"
+              style={{ 
+                willChange: 'transform',
+                backfaceVisibility: 'hidden'
+              }}
+            >
+              <source src={introVideo} type="video/webm" />
+              <source src={introVideo.replace('.webm', '.mp4')} type="video/mp4" />
+            </video>
+            
+            {/* Show loading indicator when video is not ready */}
+            {!videoCanPlay && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <div className="w-2 h-2 bg-white rounded-full animate-pulse mb-2 opacity-50"></div>
                 <p className="text-white font-[Audiowide-Regular] text-xs opacity-30">
                   Initializing...
