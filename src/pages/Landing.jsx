@@ -40,7 +40,7 @@ const Landing = () => {
   }, []);
 
   useEffect(() => {
-    // If video was already played in this session, don't show loader
+    
     if (sessionStorage.getItem("introPlayed") === "true") {
       return;
     }
@@ -58,7 +58,7 @@ const Landing = () => {
     const handleCanPlayThrough = () => {
       console.log("📹 Video ready to play smoothly");
       setVideoCanPlay(true);
-      // Start playing immediately when ready
+      
       setTimeout(() => {
         video.play().catch(console.error);
       }, 50);
@@ -70,7 +70,6 @@ const Landing = () => {
 
     const handleError = (e) => {
       console.error("❌ Video error:", e);
-      // Skip video and show main content on error
       setVideoFinished(true);
       setIsLoading(false);
       sessionStorage.setItem("introPlayed", "true");
@@ -132,7 +131,7 @@ const Landing = () => {
     >
       <StarsBackground />
 
-      {/* Video Loader - Your original design */}
+      
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -141,7 +140,7 @@ const Landing = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 1 } }}
           >
-            {/* Always render video element, but control visibility */}
+            
             <video
               ref={videoRef}
               className={`w-full h-full object-cover transition-opacity duration-300 ${
@@ -159,7 +158,7 @@ const Landing = () => {
               <source src={introVideo.replace('.webm', '.mp4')} type="video/mp4" />
             </video>
             
-            {/* Show loading indicator when video is not ready */}
+            
             {!videoCanPlay && (
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <div className="w-2 h-2 bg-white rounded-full animate-pulse mb-2 opacity-50"></div>
