@@ -29,10 +29,10 @@ Media: Optimized WebP & WebM assets
 
 🚀 Get Started
 
-git clone https://github.com/yourusername/fracture-store.git
+git clone https://github.com/suyash1354/fracture-store.git
 cd fracture-store
 npm install
-npm start
+npm run dev
 Visit at: http://localhost:3000
 
 📦 Project Structure
