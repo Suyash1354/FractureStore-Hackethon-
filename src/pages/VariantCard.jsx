@@ -5,7 +5,7 @@ const VariantCard = ({ image, previewImage, title, description, btnText, onBuy }
 
   return (
     <div
-      className="rounded-xl overflow-hidden bg-white shadow-md flex flex-col h-[400px] relative"
+      className="rounded-xl overflow-hidden bg-white shadow-md flex flex-col h-[200px] sm:h-[250px] relative"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -35,11 +35,11 @@ const VariantCard = ({ image, previewImage, title, description, btnText, onBuy }
 
       {/* Bottom Overlay */}
       <div className="absolute bottom-0 left-0 right-0 px-4 py-3 text-white z-20 bg-gradient-to-t from-black/80 via-black/50 to-transparent rounded-b-xl">
-        <h3 className="font-[OblivionFutureFree] text-sm">{title}</h3>
-        <p className="text-xs font-[Excon-Regular] mb-2">{description}</p>
+        <h3 className="font-[OblivionFutureFree] text-xs sm:text-sm">{title}</h3>
+        <p className="text-[10px] sm:text-xs font-[Excon-Regular] mb-2">{description}</p>
         <button
           onClick={onBuy}
-          className="bg-white cursor-pointer text-black px-4 py-1 rounded-full text-xs font-[Excon-Regular] w-fit"
+          className="bg-white cursor-pointer text-black px-3 py-1 rounded-full text-[10px] sm:text-xs font-[Excon-Regular] w-fit"
         >
           {btnText}
         </button>
