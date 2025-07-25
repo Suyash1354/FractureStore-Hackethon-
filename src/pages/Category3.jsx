@@ -37,7 +37,7 @@ const Category2 = () => {
         </span>
       </h1>
 
-      <div className="w-full h-[calc(100vh-250px)] px-1 pb-1 pt-2 bg-[#FAFBF7] text-black rounded-xl flex flex-col lg:flex-row gap-0.5">
+      <div className="w-full h-auto px-1 pb-1 pt-2 bg-[#FAFBF7] text-black rounded-xl flex flex-col lg:flex-row gap-0.5">
         <div className="w-full lg:flex-1 flex flex-col min-h-0 h-full">
           <h2 className="text-center text-xl font-[orbitron-bold] mb-2">Elite Riders</h2>
           <ProductCard
@@ -89,7 +89,7 @@ const Category2 = () => {
         </div>
       </div>
 
-      <div className="w-full h-[calc(100vh-250px)] px-1 pb-1 pt-2 mt-10 bg-[#FAFBF7] text-black rounded-xl flex flex-col lg:flex-row gap-0.5 overflow-y-auto lg:overflow-hidden">
+      <div className="w-full h-auto px-1 pb-1 pt-2 mt-10 bg-[#FAFBF7] text-black rounded-xl flex flex-col lg:flex-row gap-0.5 overflow-y-auto lg:overflow-hidden">
         <div className="w-full lg:flex-1 flex flex-col min-h-0 h-full">
           <h2 className="text-center text-xl font-[orbitron-bold] mb-2">Neo Track Series</h2>
           <ProductCard
