@@ -107,68 +107,98 @@ const Login = () => {
   const handleSubmit = (e) => {
   e.preventDefault();
 
-  // Get form data
   const formData = new FormData(e.target);
-  const email = formData.get('email')?.trim();
-  const password = formData.get('password')?.trim();
-  const name = formData.get('name')?.trim();
+  const email = formData.get("email")?.trim();
+  const password = formData.get("password")?.trim();
+  const name = formData.get("name")?.trim();
 
-  // Validate form
   if (!email || !password || (!isLogin && !name)) {
     setDeniedMessage("Access Denied - fill all the details");
-    gsap.fromTo(deniedRef.current, { opacity: 0, y: -20 }, { 
-      opacity: 1, 
-      y: 0, 
+    gsap.fromTo(deniedRef.current, { opacity: 0, y: -20 }, {
+      opacity: 1,
+      y: 0,
       duration: 0.8,
       onComplete: () => {
         gsap.to(deniedRef.current, {
           opacity: 0,
           y: -20,
           duration: 0.5,
-          delay: 3
+          delay: 3,
         });
       }
     });
     return;
   }
 
-  
-  setDeniedMessage("");
+  const allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
 
   if (isLogin) {
+    // LOGIN: Check if email/password match
+    const existingUser = allUsers.find(user => user.email === email && user.password === password);
     
-    const userData = {
-      email: email,
-      name: email.split('@')[0], 
-    };
-    
-    localStorage.setItem("currentUser", JSON.stringify(userData));
-    
-   
+    if (!existingUser) {
+      setDeniedMessage("Access Denied - Invalid credentials");
+      gsap.fromTo(deniedRef.current, { opacity: 0, y: -20 }, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        onComplete: () => {
+          gsap.to(deniedRef.current, {
+            opacity: 0,
+            y: -20,
+            duration: 0.5,
+            delay: 3,
+          });
+        }
+      });
+      return;
+    }
+
+    // Store current logged in user
+    localStorage.setItem("currentUser", JSON.stringify(existingUser));
+
     setSuccessMessage("You are entering the ship...");
     gsap.fromTo(successRef.current, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.8 });
 
     setTimeout(() => {
-      navigate("/"); 
+      navigate("/");
     }, 2500);
+
   } else {
-  
-    const userData = {
-      email: email,
-      name: name,
-    };
-    
-    localStorage.setItem("currentUser", JSON.stringify(userData));
-    
+    // REGISTER: Check if user already exists
+    const alreadyExists = allUsers.some(user => user.email === email);
+    if (alreadyExists) {
+      setDeniedMessage("User already exists. Please log in.");
+      gsap.fromTo(deniedRef.current, { opacity: 0, y: -20 }, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        onComplete: () => {
+          gsap.to(deniedRef.current, {
+            opacity: 0,
+            y: -20,
+            duration: 0.5,
+            delay: 3,
+          });
+        }
+      });
+      return;
+    }
+
+    const newUser = { email, password, name };
+    const updatedUsers = [...allUsers, newUser];
+    localStorage.setItem("allUsers", JSON.stringify(updatedUsers));
+    localStorage.setItem("currentUser", JSON.stringify(newUser));
+
     setSuccessMessage("You successfully joined the Space Tour!");
     gsap.fromTo(successRef.current, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.8 });
-    
-  
+
     setTimeout(() => {
       navigate("/");
     }, 2500);
   }
 };
+
 
   return (
     <div className="w-full h-screen bg-black text-white font-['Audiowide-Regular','Courier_New',monospace] flex items-center justify-center relative overflow-hidden">
