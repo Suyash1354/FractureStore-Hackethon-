@@ -6,7 +6,6 @@ import Navbar from "../components/Navbar";
 import StarsBackground from "../components/StarsBackground";
 import FloatingObject from "../components/FloatingObject";
 
-
 const Astronaut = "/assets/floatingObj/astronaut.webp";
 const Astroid1 = "/assets/floatingObj/Astroid1.webp";
 const Astroid2 = "/assets/floatingObj/Astroid2.webp";
@@ -18,13 +17,12 @@ const Landing = () => {
 
   const [isDragged, setIsDragged] = useState(false);
   const [videoFinished, setVideoFinished] = useState(() => {
-    // Check if video was already played in this session
     return sessionStorage.getItem("introPlayed") === "true";
   });
   const [isLoading, setIsLoading] = useState(() => {
-    // Only show loader if video hasn't been played in this session
     return sessionStorage.getItem("introPlayed") !== "true";
   });
+  const [videoCanPlay, setVideoCanPlay] = useState(false);
 
   const [showProfile, setShowProfile] = useState(false);
   const [showOrders, setShowOrders] = useState(false);
@@ -48,37 +46,65 @@ const Landing = () => {
     }
 
     const video = videoRef.current;
+    if (!video) return;
 
     const handleVideoEnd = () => {
       console.log("🎬 Video finished playing - showing main content");
       setVideoFinished(true);
       setIsLoading(false);
-      // Mark video as played for this session
       sessionStorage.setItem("introPlayed", "true");
     };
 
-    const handleLoadedData = () => {
-      console.log("📹 Video loaded - starting playback");
-      video.play().catch(console.error);
+    const handleCanPlayThrough = () => {
+      console.log("📹 Video ready to play smoothly");
+      setVideoCanPlay(true);
+      // Start playing immediately when ready
+      setTimeout(() => {
+        video.play().catch(console.error);
+      }, 50);
     };
 
     const handleVideoStart = () => {
       console.log("▶ Video started playing");
     };
 
-    if (video) {
-      video.addEventListener("ended", handleVideoEnd);
-      video.addEventListener("loadeddata", handleLoadedData);
-      video.addEventListener("playing", handleVideoStart);
-    }
+    const handleError = (e) => {
+      console.error("❌ Video error:", e);
+      // Skip video and show main content on error
+      setVideoFinished(true);
+      setIsLoading(false);
+      sessionStorage.setItem("introPlayed", "true");
+    };
 
-    console.log("🔄 Loader initialized - waiting for video");
+    const handleWaiting = () => {
+      console.log("⏳ Video buffering...");
+    };
+
+    const handlePlaying = () => {
+      console.log("✅ Video playing smoothly");
+    };
+
+    // Add event listeners
+    video.addEventListener("ended", handleVideoEnd);
+    video.addEventListener("canplaythrough", handleCanPlayThrough);
+    video.addEventListener("playing", handleVideoStart);
+    video.addEventListener("error", handleError);
+    video.addEventListener("waiting", handleWaiting);
+    video.addEventListener("playing", handlePlaying);
+
+    // Force load the video
+    video.load();
+
+    console.log("🔄 Video loader initialized");
 
     return () => {
       if (video) {
         video.removeEventListener("ended", handleVideoEnd);
-        video.removeEventListener("loadeddata", handleLoadedData);
+        video.removeEventListener("canplaythrough", handleCanPlayThrough);
         video.removeEventListener("playing", handleVideoStart);
+        video.removeEventListener("error", handleError);
+        video.removeEventListener("waiting", handleWaiting);
+        video.removeEventListener("playing", handlePlaying);
       }
     };
   }, []);
@@ -101,13 +127,12 @@ const Landing = () => {
 
   return (
     <div
-  ref={containerRef}
-  className="relative w-full h-screen bg-black text-white overflow-hidden laptop-fix-padding"
->
-
+      ref={containerRef}
+      className="relative w-full h-screen bg-black text-white overflow-hidden laptop-fix-padding"
+    >
       <StarsBackground />
 
-      {/* Intro Video Loader */}
+      {/* Video Loader - Your original design */}
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -116,17 +141,31 @@ const Landing = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 1 } }}
           >
-            <video
-              ref={videoRef}
-              className="w-full h-full object-cover"
-              autoPlay
-              muted
-              playsInline
-              preload="auto"
-            >
-              <source src={introVideo} type="video/webm" />
-              <source src={introVideo} type="video/mp4" />
-            </video>
+            {/* Show video when it can play, otherwise show black with subtle indicator */}
+            {videoCanPlay ? (
+              <video
+                ref={videoRef}
+                className="w-full h-full object-cover"
+                muted
+                playsInline
+                preload="auto"
+                style={{ 
+                  willChange: 'transform',
+                  backfaceVisibility: 'hidden'
+                }}
+              >
+                <source src={introVideo} type="video/webm" />
+                <source src={introVideo.replace('.webm', '.mp4')} type="video/mp4" />
+              </video>
+            ) : (
+              // Minimal loading state while video prepares (reduces black screen time)
+              <div className="flex flex-col items-center justify-center">
+                <div className="w-2 h-2 bg-white rounded-full animate-pulse mb-2 opacity-50"></div>
+                <p className="text-white font-[Audiowide-Regular] text-xs opacity-30">
+                  Initializing...
+                </p>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -166,22 +205,25 @@ const Landing = () => {
                   repeatType: "loop",
                 },
               }}
+              style={{
+                willChange: 'transform',
+                backfaceVisibility: 'hidden'
+              }}
             />
 
             {!isDragged && (
               <motion.div
-  className="absolute top-1/2 left-[calc(100%+5px)] md:left-full m-1 md:m-2 flex items-center max-w-[80px] md:max-w-none"
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ delay: 1.5, duration: 0.5 }}
-  style={{ transform: "translateY(-50%)" }}
->
-  <div className="w-6 md:w-10 h-px bg-white mr-1 md:mr-2"></div>
-  <p className="text-[10px] md:text-sm font-[Excon-Regular] text-white whitespace-nowrap">
-    Drag me
-  </p>
-</motion.div>
-
+                className="absolute top-1/2 left-[calc(100%+5px)] md:left-full m-1 md:m-2 flex items-center max-w-[80px] md:max-w-none"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.5, duration: 0.5 }}
+                style={{ transform: "translateY(-50%)" }}
+              >
+                <div className="w-6 md:w-10 h-px bg-white mr-1 md:mr-2"></div>
+                <p className="text-[10px] md:text-sm font-[Excon-Regular] text-white whitespace-nowrap">
+                  Drag me
+                </p>
+              </motion.div>
             )}
           </div>
 
@@ -241,7 +283,6 @@ const Landing = () => {
                     transition={{ duration: 0.5, ease: "easeInOut" }}
                     className="space-y-1"
                   >
-                    {/* Orders Toggle */}
                     <p
                       className="underline transition opacity-80"
                       onClick={() => setShowOrders((prev) => !prev)}
@@ -249,7 +290,6 @@ const Landing = () => {
                       Orders
                     </p>
 
-                    {/* Logout */}
                     <motion.p
                       className="underline transition cursor-pointer opacity-80"
                       initial={{ y: -10, opacity: 0 }}
@@ -258,14 +298,12 @@ const Landing = () => {
                       transition={{ duration: 0.5, ease: "easeInOut" }}
                       onClick={() => {
                         localStorage.removeItem("currentUser");
-                        // Don't remove sessionStorage here - let it persist until browser/tab closes
                         window.location.reload();
                       }}
                     >
                       Logout
                     </motion.p>
 
-                    {/* Orders List */}
                     <AnimatePresence>
                       {showOrders && (
                         <motion.ul
