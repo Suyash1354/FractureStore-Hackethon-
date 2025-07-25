@@ -170,17 +170,18 @@ const Landing = () => {
 
             {!isDragged && (
               <motion.div
-                className="absolute top-1/2 left-full m-2 flex items-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.5, duration: 0.5 }}
-                style={{ transform: "translateY(-50%)" }}
-              >
-                <div className="w-10 h-px bg-white mr-2"></div>
-                <p className="text-sm md:text-[12px] font-[Excon-Regular] text-white whitespace-nowrap">
-                  Drag me
-                </p>
-              </motion.div>
+  className="absolute top-1/2 left-[calc(100%+5px)] md:left-full m-1 md:m-2 flex items-center max-w-[80px] md:max-w-none"
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 1.5, duration: 0.5 }}
+  style={{ transform: "translateY(-50%)" }}
+>
+  <div className="w-6 md:w-10 h-px bg-white mr-1 md:mr-2"></div>
+  <p className="text-[10px] md:text-sm font-[Excon-Regular] text-white whitespace-nowrap">
+    Drag me
+  </p>
+</motion.div>
+
             )}
           </div>
 
