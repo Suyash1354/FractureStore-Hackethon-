@@ -50,7 +50,7 @@ const Category1 = () => {
         {/* LEFT COLUMN - Elite Series */}
         <div className="w-full lg:flex-1 flex flex-col min-h-0 h-full">
           <h2 className="text-center text-xl font-[orbitron-bold] mb-2">
-            Elite Series
+            Suyash
           </h2>
           <ProductCard
             image={Cars[0]}
