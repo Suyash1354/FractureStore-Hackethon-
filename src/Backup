@@ -1,0 +1,142 @@
+{/* Scroll hint */}
+          {currentFrame < 10 && imagesLoaded && (
+            <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white text-center z-20">
+              <p className="text-sm opacity-70">Scroll to open the gate</p>
+              <div className="mt-2 animate-bounce">↓</div>
+            </div>
+          )}
+
+          {/* Gate fully opened message */}
+          {currentFrame >= totalFrames - 1 && (
+            <div className="absolute top-10 left-1/2 transform -translate-x-1/2 text-white text-center z-20">
+              <p className="text-lg font-bold">🎉 Gate Opened! Choose a category</p>
+              <p className="text-sm mt-2 opacity-80">
+                Click on any category image to explore
+              </p>
+            </div>
+          )}
+
+
+          import React, { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import spaceshipImg from "../assets/Login/spaceship.png"; // Update path if needed
+
+gsap.registerPlugin(ScrollTrigger);
+
+const About = () => {
+  const containerRef = useRef(null);
+  const spaceshipRef = useRef(null);
+  const text25TopRef = useRef(null);
+  const text25BottomRef = useRef(null);
+  const text75TopRef = useRef(null);
+  const text75BottomRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Spaceship horizontal movement
+      gsap.to(spaceshipRef.current, {
+  x: () => window.innerWidth - 128,
+  ease: "none",
+  scrollTrigger: {
+    trigger: containerRef.current,
+    start: "top top",
+    end: "bottom bottom",
+    scrub: true,
+  },
+});
+
+
+      // Text fade-ins
+     let lastScroll = 0;
+
+const showTexts = (textRefs) =>
+  textRefs.forEach((ref) => {
+    gsap.set(ref.current, { opacity: 0 }); // start hidden
+
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: true,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        const isScrollingDown = self.direction === 1;
+        const isScrollingUp = self.direction === -1;
+
+        if (ref === text25TopRef || ref === text25BottomRef) {
+          if (isScrollingDown && progress > 0.25) {
+            gsap.to(ref.current, { opacity: 1, duration: 0.3 });
+          }
+          if (isScrollingUp && progress < 0.25) {
+            gsap.to(ref.current, { opacity: 0, duration: 0.3 });
+          }
+        } else if (ref === text75TopRef || ref === text75BottomRef) {
+          if (isScrollingDown && progress > 0.75) {
+            gsap.to(ref.current, { opacity: 1, duration: 0.3 });
+          }
+          if (isScrollingUp && progress < 0.75) {
+            gsap.to(ref.current, { opacity: 0, duration: 0.3 });
+          }
+        }
+      },
+    });
+  });
+
+
+      showTexts([
+        text25TopRef,
+        text25BottomRef,
+        text75TopRef,
+        text75BottomRef,
+      ]);
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="h-[300vh] relative bg-black text-white overflow-hidden"
+    >
+      {/* SPACESHIP */}
+      <img
+        ref={spaceshipRef}
+        src={spaceshipImg}
+        alt="spaceship"
+        className="fixed top-1/2 left-0 -translate-y-1/2 w-32 z-10 pointer-events-none"
+      />
+
+      {/* 25% TEXTS */}
+      <div
+        ref={text25TopRef}
+        className="fixed left-[25vw] top-[15%] text-center text-xl opacity-0 transition duration-300"
+      >
+        <p>We have reached Checkpoint 1</p>
+      </div>
+      <div
+        ref={text25BottomRef}
+        className="fixed left-[25vw] bottom-[15%] text-center text-xl opacity-0 transition duration-300"
+      >
+        <p>Engaging mission protocol...</p>
+      </div>
+
+      {/* 75% TEXTS */}
+      <div
+        ref={text75TopRef}
+        className="fixed left-[75vw] top-[15%] text-center text-xl opacity-0 transition duration-300"
+      >
+        <p>Checkpoint 2 detected</p>
+      </div>
+      <div
+        ref={text75BottomRef}
+        className="fixed left-[75vw] bottom-[15%] text-center text-xl opacity-0 transition duration-300"
+      >
+        <p>Preparing for landing...</p>
+      </div>
+    </div>
+  );
+};
+
+export default About;

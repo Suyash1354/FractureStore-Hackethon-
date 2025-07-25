@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: "orbitron-bold";
+    src: url(/assets/fonts/orbitron/orbitron-medium.otf);
+}
+
+@font-face {
+    font-family: "Audiowide-Regular";
+    src: url(/assets/fonts/audiowide/Audiowide-Regular.ttf);
+}
+
+@font-face {
+    font-family: "Bezmiar-Regular";
+    src: url(/assets/fonts/bezmiar/Bezmiar-Regular.otf);
+}
+
+@font-face {
+    font-family: "Dena";
+    src: url(/assets/fonts/dena/Dena.otf);
+}
+
+@font-face {
+    font-family: "Minasans";
+    src: url(/assets/fonts/minasans/Minasans.ttf);
+}
+
+@font-face {
+    font-family: "quantum";
+    src: url(/assets/fonts/quantum/quantum.otf);
+}
+
+@font-face {
+    font-family: "OblivionFutureFree";
+    src: url(/assets//fonts/oblivion_future/OblivionFutureFree.ttf);
+}
+
+@font-face {
+    font-family: "Excon-Regular";
+    src: url(/assets/fonts/Excon_Complete/Excon-Regular.otf);
+}
+
+@keyframes flicker {
+  0% { opacity: 1; }
+  10% { opacity: 0.8; transform: translateX(-1px); }
+  20% { opacity: 0.9; transform: translateX(1px); }
+  30% { opacity: 0.85; transform: translateY(-1px); }
+  40% { opacity: 0.95; transform: translateX(1px); }
+  50% { opacity: 1; }
+  60% { opacity: 0.8; transform: translateY(1px); }
+  70% { opacity: 0.9; transform: translateX(-1px); }
+  80% { opacity: 0.85; transform: translateY(1px); }
+  90% { opacity: 0.9; transform: translateX(1px); }
+  100% { opacity: 1; transform: none; }
+}
+
+.flicker {
+  animation: flicker 1.5s infinite alternate;
+}
+
+
+.stars-overlay::before {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  box-shadow:
+    3vw 7vh white,
+    14vw 18vh white,
+    22vw 90vh white,
+    30vw 14vh white,
+    39vw 38vh white,
+    46vw 67vh white,
+    53vw 13vh white,
+    61vw 29vh white,
+    67vw 78vh white,
+    74vw 11vh white,
+    82vw 45vh white,
+    89vw 60vh white,
+    93vw 22vh white,
+    97vw 83vh white,
+    15vw 72vh white,
+    8vw 55vh white,
+    25vw 30vh white,
+    42vw 94vh white,
+    58vw 10vh white,
+    70vw 50vh white;
+  animation: twinkle 3s infinite ease-in-out;
+}
+
+.stars-overlay::after {
+  content: '';
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  box-shadow:
+    6vw 6vh rgba(255,255,255,0.3),
+    12vw 76vh rgba(255,255,255,0.3),
+    17vw 31vh rgba(255,255,255,0.3),
+    23vw 67vh rgba(255,255,255,0.3),
+    29vw 25vh rgba(255,255,255,0.3),
+    35vw 85vh rgba(255,255,255,0.3),
+    43vw 12vh rgba(255,255,255,0.3),
+    52vw 62vh rgba(255,255,255,0.3),
+    66vw 90vh rgba(255,255,255,0.3),
+    78vw 35vh rgba(255,255,255,0.3),
+    85vw 59vh rgba(255,255,255,0.3),
+    91vw 27vh rgba(255,255,255,0.3),
+    98vw 73vh rgba(255,255,255,0.3);
+  animation: twinkle 5s infinite ease-in-out;
+}
+
+
+@media (min-height: 700px) and (max-height: 900px) {
+  .laptop-fix-padding {
+    padding-bottom: 6rem; /* Adjust as needed */
+  }
+}
